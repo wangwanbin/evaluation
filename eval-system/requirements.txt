@@ -1,0 +1,9 @@
+# AI 能力评估系统 - 依赖清单
+aiohttp>=3.9.0
+click>=8.1.0
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+rich>=13.7.0
+jinja2>=3.1.0
+matplotlib>=3.8.0
+numpy>=1.24.0

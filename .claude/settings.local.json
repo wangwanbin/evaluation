@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x /e/PyWorkspaces/evaluation/eval-system/start.sh)",
+      "Bash(python main.py --help)",
+      "Bash(python main.py run llm --help)",
+      "Bash(python main.py dataset list)",
+      "Bash(python main.py init)",
+      "Bash(python main.py check)",
+      "Bash(python -c ' *)"
+    ]
+  }
+}

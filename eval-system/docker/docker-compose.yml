@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  app:
+    # 版本标签，与 images/ 目录中的 .tar 文件版本号一致
+    image: eval-app:v1.0.0
+    # build:                          # 🔑 不构建！镜像已预打包在 images/ 中
+    #   context: ..
+    #   dockerfile: docker/Dockerfile.app
+
+    env_file: ../.env
+    environment:
+      - EVAL_DB_PATH=/app/results/eval.db
+      - EVAL_RESULTS_DIR=/app/results/runs
+      - EVAL_REPORTS_DIR=/app/results/reports
+    volumes:
+      # 数据集（只读）
+      - ../datasets:/app/datasets:ro
+      # 结果输出（读写）
+      - ../results:/app/results
+    ports:
+      - "8000:8000"      # API 和 Web UI 端口
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "from core.config import load_config; cfg = load_config(); exit(0)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Agent 沙箱（P2 阶段）
+  # agent-sandbox:
+  #   image: eval-agent-sandbox:v1.0.0
+  #   ...

@@ -1,0 +1,11 @@
+# UI 镜像（P2 阶段）
+FROM python:3.11-slim-bookworm
+
+WORKDIR /app
+
+COPY --from=eval-app:latest /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY web/ /app/web/
+
+EXPOSE 8000
+
+CMD ["python", "-m", "web.app"]
