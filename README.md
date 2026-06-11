@@ -1,23 +1,30 @@
 # AI 能力评估系统（Evaluation Harness）
 
 <p align="center">
-  <strong>大模型评测 · RAG 评测 · Agent 评测框架</strong>
+  <strong>大模型评测 · RAG 评测 · Agent 评测 · LLM Evaluation Harness</strong>
   <br>
-  支持 MMLU、GSM8K、C-Eval、HellaSwag、HumanEval 等主流 Benchmark
+  MMLU · GSM8K · C-Eval · HellaSwag · HumanEval · MBPP · IFEval · PIQA · Needle-in-Haystack
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.11+-blue" alt="Python">
-  <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
-  <img src="https://img.shields.io/badge/benchmarks-9-orange" alt="Benchmarks">
-  <img src="https://img.shields.io/badge/questions-209-brightgreen" alt="Questions">
+  <img src="https://img.shields.io/badge/Python-3.11+-blue" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
+  <img src="https://img.shields.io/badge/benchmarks-9-orange" alt="9 Benchmarks">
+  <img src="https://img.shields.io/badge/questions-209-brightgreen" alt="209 Questions">
   <img src="https://img.shields.io/badge/LLM-RAG-Agent-purple" alt="LLM RAG Agent">
+  <img src="https://img.shields.io/badge/OpenAI_API-compatible-success" alt="OpenAI API Compatible">
+  <img src="https://img.shields.io/badge/离线部署-无需外网-blueviolet" alt="离线部署">
+  <img src="https://img.shields.io/badge/评测-模型能力评估-red" alt="评测">
 </p>
 
-> **这是一个评测夹具（Evaluation Harness）—— 系统本身不运行模型、不提供推理服务。**
+> **大模型评测工具 · LLM Evaluation Harness · 模型能力评估框架**
 >
+> 这是一个评测夹具（Evaluation Harness）—— 系统本身不运行模型、不提供推理服务。
 > 被评测模型通过 **OpenAI 兼容 API** 接入（vLLM / 云端 API / 任意兼容端点）。
 > 系统的职责：发 Prompt → 收 Response → 评分 → 出报告。
+>
+> 适用场景：**大模型选型对比** · **模型微调前后评估** · **RAG 系统检索质量评测** · **Agent 能力验证** ·
+> **Benchmark 自动化测试** · **模型能力排行榜** · **AI 安全与对齐评测**
 
 ---
 
@@ -397,3 +404,50 @@ python main.py compare <id1> <id2>    # 对比两次评测
 | 报告 | matplotlib + HTML + Markdown |
 | 部署 | Docker / 本地 Python 均可 |
 | 插件 | ABC 自动发现注册机制 |
+
+---
+
+## 🔍 搜索关键词
+
+本项目可通过以下关键词被搜索到：
+
+**中文关键词：**
+`大模型评测` `大模型评估` `LLM评测` `模型能力评估` `模型评测框架` `AI评测系统`
+`RAG评估` `RAG评测` `检索增强生成评测` `Agent评测` `Agent评估` `智能体评测`
+`Benchmark测试` `基准测试` `模型排行榜` `模型对比` `模型选型` `模型能力测试`
+`MMLU评测` `GSM8K评测` `C-Eval评测` `HumanEval评测` `IFEval评测`
+`大模型离线评测` `无需外网` `Docker部署` `LLM-as-Judge` `Prompt评测`
+
+**English keywords：**
+`LLM Evaluation` `LLM Evaluation Harness` `LLM Benchmark` `Model Evaluation Framework`
+`AI Evaluation` `RAG Evaluation` `Agent Evaluation` `LLM-as-Judge`
+`MMLU` `GSM8K` `C-Eval` `HellaSwag` `HumanEval` `MBPP` `IFEval` `PIQA`
+`OpenAI Compatible API` `vLLM` `Few-shot Evaluation` `Model Capability Testing`
+`Machine Learning Benchmark` `NLP Evaluation` `Model Alignment` `Safety Evaluation`
+
+**GitHub Topics 推荐（在仓库右侧设置）：**
+```
+llm-evaluation, 大模型评测, rag-evaluation, agent-evaluation, evaluation-harness,
+benchmark, mmlu, gsm8k, ceval, humaneval, ifeval, hellaswag, mbpp, piqa,
+llm-benchmark, model-evaluation, ai-evaluation, llm-as-judge, vllm,
+openai-compatible, nlp-benchmark, 人工智能, 模型评估, 基准测试
+```
+
+## 相关项目
+
+- [EleutherAI LM Evaluation Harness](https://github.com/EleutherAI/lm-evaluation-harness) — 业界标准的 LLM 评测框架（英文）
+- [OpenCompass](https://github.com/open-compass/opencompass) — 上海 AI 实验室的大模型评测平台
+- [C-Eval](https://github.com/SJTU-LIT/ceval) — 中文基础模型评估数据集
+- [MMLU](https://github.com/hendrycks/test) — 多任务语言理解评测基准
+- [vLLM](https://github.com/vllm-project/vllm) — 高性能 LLM 推理服务（本系统推荐配合使用）
+
+---
+
+<div align="center">
+  <sub>
+    🚀 <strong>AI 能力评估系统</strong> —
+    让大模型评测更简单、更便携、更可靠
+    <br>
+    <em>LLM Evaluation · RAG Evaluation · Agent Evaluation · Benchmark Framework</em>
+  </sub>
+</div>
