@@ -9,7 +9,10 @@
       "Bash(python main.py check)",
       "Bash(python -c ' *)",
       "Bash(git remote *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git check-ignore *)",
+      "Bash(git commit -m '添加 .gitignore，排除 __pycache__ 和 .vscode *)",
+      "Bash(git push *)"
     ]
   }
 }
