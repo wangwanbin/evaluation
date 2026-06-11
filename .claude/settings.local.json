@@ -7,7 +7,9 @@
       "Bash(python main.py dataset list)",
       "Bash(python main.py init)",
       "Bash(python main.py check)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
     ]
   }
 }
