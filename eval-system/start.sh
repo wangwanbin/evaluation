@@ -160,7 +160,7 @@ start_service() {
     echo -e "\n${BLUE}🚀 启动服务...${NC}"
 
     # 确保结果目录存在
-    mkdir -p results/runs results/reports results/backups
+    mkdir -p results results/reports results/backups
 
     docker compose -f docker/docker-compose.yml up -d
 

@@ -260,7 +260,7 @@ class MMLUBenchmark(BaseLLMBenchmark):
     def __init__(self):
         super().__init__()
         self._questions: list[dict] = []
-        self._data_path = Path(self.config.results_dir).parent.parent / "datasets" / "llm" / "mmlu"
+        self._data_path = Path(self.config.results_dir).parent / "datasets" / "llm" / "mmlu"
 
     def load_questions(self) -> list[dict]:
         """加载 MMLU 题目（优先从文件加载，回退到内置数据 75 题）"""

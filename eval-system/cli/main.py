@@ -70,7 +70,7 @@ def init(ctx):
     click.echo("🔧 初始化环境...")
 
     # 创建必要目录
-    for d in [config.results_dir, Path(config.results_dir).parent / "reports"]:
+    for d in [config.results_dir, Path(config.results_dir) / "reports"]:
         Path(d).mkdir(parents=True, exist_ok=True)
         click.echo(f"  ✅ 目录已创建: {d}")
 
@@ -136,7 +136,7 @@ def check(ctx):
 @click.pass_context
 def logs(ctx, tail, since):
     """查看评测日志"""
-    log_dir = Path(ctx.obj["config"].results_dir).parent / "logs"
+    log_dir = Path(ctx.obj["config"].results_dir) / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / "eval.log"
 
@@ -248,7 +248,7 @@ def llm(ctx, bench, concurrency, timeout):
     for b in result.benchmarks:
         click.echo(f"   ├─ {b.benchmark_name:<12} 得分: {b.score_pct:.1f}% （{b.correct_count}/{b.total_questions}）")
 
-    click.echo(f"\n📄 报告位置: results/runs/{result.run_id}/")
+    click.echo(f"\n📄 报告位置: results/{result.run_id}/")
     click.echo(f"   ├── report.html （浏览器打开）")
     click.echo(f"   └── report.md （终端预览）")
 

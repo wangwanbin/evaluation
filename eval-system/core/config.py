@@ -122,7 +122,7 @@ def load_config(env_file: Optional[str] = None) -> Config:
     if not cfg.db_path:
         cfg.db_path = str(base / "results" / "eval.db")
     if not cfg.results_dir:
-        cfg.results_dir = str(base / "results" / "runs")
+        cfg.results_dir = str(base / "results")
     if not cfg.reports_dir:
         cfg.reports_dir = str(base / "results" / "reports")
 

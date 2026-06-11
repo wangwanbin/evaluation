@@ -37,7 +37,7 @@ if not exist %COMPOSE_FILE% (
 
 echo.
 echo 🚀 启动服务...
-mkdir results\runs 2>nul
+mkdir results 2>nul
 mkdir results\reports 2>nul
 mkdir results\backups 2>nul
 

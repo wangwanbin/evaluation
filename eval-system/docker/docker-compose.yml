@@ -11,7 +11,7 @@ services:
     env_file: ../.env
     environment:
       - EVAL_DB_PATH=/app/results/eval.db
-      - EVAL_RESULTS_DIR=/app/results/runs
+      - EVAL_RESULTS_DIR=/app/results
       - EVAL_REPORTS_DIR=/app/results/reports
     volumes:
       # 数据集（只读）

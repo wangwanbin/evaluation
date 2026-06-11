@@ -102,7 +102,7 @@ class GSM8KBenchmark(BaseLLMBenchmark):
     def __init__(self):
         super().__init__()
         self._questions: list[dict] = []
-        self._data_path = Path(self.config.results_dir).parent.parent / "datasets" / "llm" / "gsm8k"
+        self._data_path = Path(self.config.results_dir).parent / "datasets" / "llm" / "gsm8k"
 
     def load_questions(self) -> list[dict]:
         """加载 GSM8K 题目（优先从文件，回退到内置 40 题）"""
