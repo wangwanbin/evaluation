@@ -1,4 +1,18 @@
-# AI 能力评估系统
+# AI 能力评估系统（Evaluation Harness）
+
+<p align="center">
+  <strong>大模型评测 · RAG 评测 · Agent 评测框架</strong>
+  <br>
+  支持 MMLU、GSM8K、C-Eval、HellaSwag、HumanEval 等主流 Benchmark
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11+-blue" alt="Python">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
+  <img src="https://img.shields.io/badge/benchmarks-9-orange" alt="Benchmarks">
+  <img src="https://img.shields.io/badge/questions-209-brightgreen" alt="Questions">
+  <img src="https://img.shields.io/badge/LLM-RAG-Agent-purple" alt="LLM RAG Agent">
+</p>
 
 > **这是一个评测夹具（Evaluation Harness）—— 系统本身不运行模型、不提供推理服务。**
 >
