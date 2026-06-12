@@ -12,12 +12,23 @@ from core.schema import ModelConfig
 
 
 class ModelAdapter:
-    """OpenAI 兼容 API 适配器"""
+    """OpenAI / Ollama 兼容 API 适配器"""
 
     def __init__(self, config: ModelConfig, timeout: int = 120):
         self.config = config
         self.timeout = timeout
         self._session: Optional[aiohttp.ClientSession] = None
+        self._resolved_base = self._resolve_api_base()
+
+    def _resolve_api_base(self) -> str:
+        """解析 API 基地址，适配不同后端"""
+        base = self.config.api_base.rstrip("/")
+        if self.config.model_type == "ollama":
+            # Ollama 原生地址是 http://localhost:11434
+            # 自动追加 /v1 以使用其 OpenAI 兼容端点
+            if not base.endswith("/v1"):
+                base = base + "/v1"
+        return base
 
     async def _get_session(self) -> aiohttp.ClientSession:
         if self._session is None or self._session.closed:
@@ -53,7 +64,7 @@ class ModelAdapter:
         """发送聊天请求，返回完整响应"""
         session = await self._get_session()
         body = self._build_chat_body(messages, **kwargs)
-        url = f"{self.config.api_base.rstrip('/')}/chat/completions"
+        url = f"{self._resolved_base}/chat/completions"
 
         async with session.post(url, json=body) as resp:
             if resp.status != 200:
@@ -75,7 +86,7 @@ class ModelAdapter:
         result = await self.chat(messages, **kwargs)
         elapsed = (time.time() - start) * 1000
 
-        usage = result.get("usage", {})
+        usage = result.get("usage", {}) or {}
         choice = result.get("choices", [{}])[0]
         message = choice.get("message", {})
         content = message.get("content", "") or ""
@@ -84,9 +95,9 @@ class ModelAdapter:
             "content": content,
             "finish_reason": choice.get("finish_reason", ""),
             "latency_ms": round(elapsed, 2),
-            "prompt_tokens": usage.get("prompt_tokens", 0),
-            "completion_tokens": usage.get("completion_tokens", 0),
-            "total_tokens": usage.get("total_tokens", 0),
+            "prompt_tokens": usage.get("prompt_tokens", 0) or 0,
+            "completion_tokens": usage.get("completion_tokens", 0) or 0,
+            "total_tokens": usage.get("total_tokens", 0) or 0,
             "raw": result,
         }
 
@@ -98,11 +109,15 @@ class ModelAdapter:
         try:
             result = await self.chat_with_usage(messages, max_tokens=10)
             await self.close()
+            info = {"type": self.config.model_type}
+            if self.config.model_type == "ollama":
+                info["hint"] = "Ollama 模型"
             return {
                 "success": True,
                 "model": self.config.model_name,
                 "response": result["content"][:200],
                 "latency_ms": result["latency_ms"],
+                "info": info,
             }
         except Exception as e:
             await self.close()
@@ -111,6 +126,20 @@ class ModelAdapter:
                 "model": self.config.model_name,
                 "error": str(e),
             }
+
+    async def list_ollama_models(self) -> list[dict]:
+        """列出 Ollama 本地已拉取的模型"""
+        base = self.config.api_base.rstrip("/")
+        # Ollama 原生 API 端点 /api/tags（不带 /v1）
+        if "/v1" in base:
+            base = base.replace("/v1", "")
+        url = f"{base}/api/tags"
+        session = await self._get_session()
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                raise RuntimeError(f"Ollama API 请求失败 [HTTP {resp.status}]")
+            data = await resp.json()
+        return data.get("models", [])
 
     async def close(self):
         if self._session and not self._session.closed:

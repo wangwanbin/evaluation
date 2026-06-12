@@ -25,6 +25,7 @@ class ModelConfig:
     api_base: str
     api_key: str = ""
     model_name: str = "default"
+    model_type: str = "openai"  # openai | ollama
     temperature: float = 0.0
     max_tokens: int = 2048
     top_p: float = 1.0

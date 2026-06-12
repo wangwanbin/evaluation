@@ -183,15 +183,56 @@ docker exec -it eval-app python main.py run llm -b mmlu
 
 ---
 
+## 🦙 Ollama 支持
+
+本系统支持直接评测 **Ollama 本地部署的模型**。
+
+### 配置方式
+
+```bash
+# .env 中改为 Ollama 配置
+EVAL_MODEL_TYPE=ollama
+EVAL_MODEL_API_BASE=http://localhost:11434   # Ollama 默认地址，系统自动追加 /v1
+EVAL_MODEL_NAME=llama3.2                     # 你的模型名，用 ollama list 查看
+```
+
+### 用法
+
+```bash
+# 1. 查看本地已拉取的 Ollama 模型
+python main.py ollama list
+
+# 2. 测试连通性
+python main.py test
+
+# 3. 开始评测（与 vLLM 用法完全一致）
+python main.py run llm -b mmlu
+```
+
+### 注意事项
+
+- Ollama 需 **0.1.32 以上版本**（自带 OpenAI 兼容端点）
+- 确保模型已拉取：`ollama pull llama3.2`（约 2GB）
+- 模型名和 Ollama 中的一致（如 `llama3.2:3b`、`qwen2.5:7b`）
+- Judge 模型也可以设为 Ollama 模型，与评测模型共用不冲突
+
+---
+
 ## ⚙️ 配置说明
 
 系统只通过 `.env` 配置，位于项目根目录：
 
 ```bash
-# ===== 必需：被评测模型的 API 地址 =====
-EVAL_MODEL_API_BASE=http://localhost:8000/v1    # 必填！vLLM 地址
+# ===== 被评测模型：vLLM / OpenAI 兼容 API（默认） =====
+EVAL_MODEL_API_BASE=http://localhost:8000/v1    # 必填！API 地址
 EVAL_MODEL_API_KEY=                              # API Key（本地留空）
 EVAL_MODEL_NAME=qwen2.5-72b                     # 模型名称
+EVAL_MODEL_TYPE=openai                          # openai（默认）| ollama
+
+# ===== 被评测模型：Ollama（取消注释切换） =====
+# EVAL_MODEL_TYPE=ollama
+# EVAL_MODEL_API_BASE=http://localhost:11434
+# EVAL_MODEL_NAME=llama3.2
 
 # ===== 评测参数（可选） =====
 EVAL_CONCURRENCY=10                              # 并发数，默认 10
@@ -201,6 +242,7 @@ EVAL_TIMEOUT=120                                 # 单题超时秒数
 JUDGE_MODEL_API_BASE=
 JUDGE_MODEL_API_KEY=
 JUDGE_MODEL_NAME=
+# JUDGE_MODEL_TYPE=openai
 
 # ===== 存储路径（可选，默认项目 results/ 目录） =====
 # EVAL_DB_PATH=results/eval.db

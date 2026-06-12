@@ -122,10 +122,12 @@ def check(ctx):
     click.echo("\n🔌 测试模型连通性...")
     result = asyncio.run(ModelAdapter(config.eval_model_config).test_connection())
     if result["success"]:
-        click.echo(f"  ✅ 模型可达: {result['model']} (延迟: {result['latency_ms']}ms)")
+        info = result.get("info", {})
+        tag = "🦙 Ollama" if info.get("type") == "ollama" else "🤖 vLLM/OpenAI"
+        click.echo(f"  ✅ {tag} 模型可达: {result['model']} (延迟: {result['latency_ms']}ms)")
     else:
         click.echo(f"  ⚠️  模型不可达: {result.get('error', '')}")
-        click.echo("  (此警告不阻止启动，请确认 vLLM 已运行)")
+        click.echo("  (此警告不阻止启动，请确认模型服务已运行)")
 
     click.echo("\n✅ 环境检查完成")
 
@@ -156,16 +158,19 @@ def logs(ctx, tail, since):
 @cli.command()
 @click.pass_context
 def test(ctx):
-    """测试 vLLM 连通性（发一个 "1+1=?" 请求验证）"""
+    """测试模型连通性（发一个 "1+1=?" 请求验证）"""
     config = ctx.obj["config"]
     click.echo(f"🔌 测试模型连通性...")
     click.echo(f"   模型: {config.eval_model_name}")
     click.echo(f"   端点: {config.eval_model_api_base}")
+    click.echo(f"   类型: {config.eval_model_type}")
 
     result = asyncio.run(ModelAdapter(config.eval_model_config).test_connection())
 
     if result["success"]:
-        click.echo(f"\n✅ 连接成功！")
+        info = result.get("info", {})
+        tag = "🦙 Ollama" if info.get("type") == "ollama" else "🤖 OpenAI"
+        click.echo(f"\n✅ {tag} 连接成功！")
         click.echo(f"   模型: {result['model']}")
         click.echo(f"   响应: {result['response']}")
         click.echo(f"   延迟: {result['latency_ms']}ms")
@@ -173,6 +178,45 @@ def test(ctx):
         click.echo(f"\n❌ 连接失败")
         click.echo(f"   错误: {result.get('error', '未知错误')}")
         sys.exit(1)
+
+
+@cli.group()
+def ollama():
+    """Ollama 本地模型管理"""
+
+
+@ollama.command("list")
+@click.pass_context
+def ollama_list(ctx):
+    """列出 Ollama 本地已拉取的模型"""
+    config = ctx.obj["config"]
+    click.echo("🦙 查询 Ollama 本地模型...\n")
+    try:
+        adapter = ModelAdapter(config.eval_model_config)
+        models = asyncio.run(adapter.list_ollama_models())
+        asyncio.run(adapter.close())
+    except Exception as e:
+        click.echo(f"❌ 查询失败: {e}")
+        click.echo("   请确认 Ollama 服务已启动（默认 http://localhost:11434）")
+        sys.exit(1)
+
+    if not models:
+        click.echo("📭 尚未拉取任何模型。请先运行：ollama pull <模型名>")
+        return
+
+    click.echo(f"{'模型名称':<22} {'大小':<10} {'修改时间':<22}")
+    click.echo("-" * 55)
+    for m in models:
+        name = m.get("name", "?")
+        size_mb = m.get("size", 0) // (1024 * 1024)
+        modified = m.get("modified_at", "")[:16] if m.get("modified_at") else "?"
+        click.echo(f"  {name:<20} {size_mb:<8}MB {modified}")
+    click.echo(f"\n共 {len(models)} 个模型")
+    click.echo("\n💡 使用示例：")
+    click.echo('   在 .env 中设置：')
+    click.echo('     EVAL_MODEL_TYPE=ollama')
+    click.echo('     EVAL_MODEL_API_BASE=http://localhost:11434')
+    click.echo(f'     EVAL_MODEL_NAME={models[0]["name"] if models else "<模型名>"}')
 
 
 # ==================== 运行评测 ====================

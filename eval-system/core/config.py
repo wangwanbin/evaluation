@@ -20,11 +20,13 @@ class Config:
     eval_model_api_base: str = "http://localhost:8000/v1"
     eval_model_api_key: str = ""
     eval_model_name: str = "qwen2.5-72b"
+    eval_model_type: str = "openai"  # openai | ollama
 
     # Judge 模型
     judge_model_api_base: str = ""
     judge_model_api_key: str = ""
     judge_model_name: str = ""
+    judge_model_type: str = "openai"
 
     # RAG 端点
     rag_api_base: str = ""
@@ -50,6 +52,7 @@ class Config:
             api_base=self.eval_model_api_base,
             api_key=self.eval_model_api_key,
             model_name=self.eval_model_name,
+            model_type=self.eval_model_type,
         )
 
     @property
@@ -60,6 +63,7 @@ class Config:
             api_base=self.judge_model_api_base,
             api_key=self.judge_model_api_key,
             model_name=self.judge_model_name or self.eval_model_name,
+            model_type=self.judge_model_type or self.eval_model_type,
         )
 
     @property
@@ -103,9 +107,11 @@ def load_config(env_file: Optional[str] = None) -> Config:
         eval_model_api_base=_env_str("EVAL_MODEL_API_BASE", "http://localhost:8000/v1"),
         eval_model_api_key=_env_str("EVAL_MODEL_API_KEY", ""),
         eval_model_name=_env_str("EVAL_MODEL_NAME", "qwen2.5-72b"),
+        eval_model_type=_env_str("EVAL_MODEL_TYPE", "openai"),
         judge_model_api_base=_env_str("JUDGE_MODEL_API_BASE", ""),
         judge_model_api_key=_env_str("JUDGE_MODEL_API_KEY", ""),
         judge_model_name=_env_str("JUDGE_MODEL_NAME", ""),
+        judge_model_type=_env_str("JUDGE_MODEL_TYPE", ""),
         rag_api_base=_env_str("RAG_API_BASE", ""),
         rag_api_key=_env_str("RAG_API_KEY", ""),
         concurrency=_env_int("EVAL_CONCURRENCY", 10),
